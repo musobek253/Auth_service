@@ -1,2 +1,15 @@
-package com.musobek.auth_service.dto;public class authenticationRequest {
+package com.musobek.auth_service.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class authenticationRequest {
+    private String email;
+    private String password;
 }
