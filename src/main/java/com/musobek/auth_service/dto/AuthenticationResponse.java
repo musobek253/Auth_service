@@ -15,4 +15,15 @@ public class AuthenticationResponse {
     private String accessToken;
     @JsonProperty("refresh_token")
     private String refreshToken;
+
+    private String msg;
+
+    public AuthenticationResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+
+    public AuthenticationResponse(String msg) {
+        this.msg = msg;
+    }
 }

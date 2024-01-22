@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,20 +52,28 @@ public class JwtService {
     private String buildJwtToken(
             Map<String , Objects> extraClaims,
             UserDetails userDetails,
-            long jwtExpiration
+            long expiration
     ){
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+jwtExpiration))
-                .signWith(getSigniKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis()+expiration))
+                .signWith(getSigniKey(), SignatureAlgorithm.forSigningKey(Keys.secretKeyFor(SignatureAlgorithm.HS256)))
                 .compact();
     }
     public  boolean validToken(UserDetails userDetails , String  token){
         final String userName = extractUsername(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            return extractUsername(token) != null && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token) {
@@ -86,8 +95,8 @@ public class JwtService {
 
     private Key getSigniKey() {
 
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = this.secretKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
 
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 }
