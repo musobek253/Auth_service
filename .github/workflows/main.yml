@@ -10,12 +10,16 @@ jobs:
     steps:
       - name: Checkout code
         users: actions/checkout@v2
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
       - name: Setup JDK 17
         users: actions/setup-java@v3
         with:
           distribution: 'corretto'
           java-version: 17
+<<<<<<< HEAD
 
       - name: Unit Tests
         run: mvn -B test --file pom.xml
@@ -24,3 +28,11 @@ jobs:
         run:
           mvn clean
           mvn -B package --file pom.xml
+=======
+      - name: Unit Tests
+        run: mvn -B test --file pom.xml
+      - name:  Build the application
+        run:
+          mvn clean
+          mvn -B package --file pom.xml
+>>>>>>> origin/main
