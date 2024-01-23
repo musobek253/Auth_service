@@ -1,16 +1,20 @@
 name: Build & Deploy Spring App
 on:
   push:
-    branches:  [ main ]
+    branches:  
+       - main
+  pull_request:
+    branches:
+      - main  
 jobs:
-  build-deploy:
+  deployment:
     name: Build and Deploy Spring boot for beginner
     runs-on: ubuntu-latest
+
+    environment: production
     steps:
-      - name: Checkout code
+      - name: deploy
         users: actions/checkout@v2
-
-
 
       - name: Setup JDK 17
         users: actions/setup-java@v3
